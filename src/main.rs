@@ -1,6 +1,6 @@
 use rand::Rng;
 use std::cmp::Ordering;
-use std::io::{self,Write};
+use std::io::{self, Write};
 
 fn user_guess() {
     let secret_number = rand::thread_rng().gen_range(1, 101);
@@ -20,7 +20,7 @@ fn user_guess() {
             Err(_) => {
                 println!("Please enter an integer");
                 continue;
-            },
+            }
         };
 
         match guess.cmp(&secret_number) {
@@ -43,6 +43,10 @@ fn computer_guess() {
     let mut mid: usize;
     loop {
         mid = (high + low) / 2;
+        if mid == high || mid == low {
+            println!("Something is wrong, did you make a mistake in your responses?");
+            break;
+        }
         print!("Is your number equal {}? [yes|less|more]: ", mid);
         io::stdout().flush().unwrap();
         let mut response = String::new();
@@ -53,14 +57,16 @@ fn computer_guess() {
         match response.trim() {
             "less" => high = mid,
             "more" => low = mid,
-            "yes" => break,
+            "yes" => {
+                println!("Your number is {}", mid);
+                break;
+            }
             _ => println!("Please respond with yes, less or more"),
         }
     }
-    println!("Your number is {}", mid);
 }
 
-fn main() { 
+fn main() {
     loop {
         print!("Who should guess?\n1: You\n2: computer\nYour choice: ");
         let mut choice = String::new();
@@ -87,5 +93,5 @@ fn main() {
             "yes" => continue,
             _ => break,
         };
-    };
+    }
 }
